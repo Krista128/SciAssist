@@ -1,21 +1,19 @@
 import re
 import json
-import AgentState
 from ollama import Client
 from typing import List, Dict, Any
 import requests
 import xml.etree.ElementTree as ET
 
 class Agent:
-    def __init__(self, prompt):
-        self.prompt = prompt
+    def __init__(self):
         self.model = "qcwind/qwen3-8b-instruct-Q4-K-M:latest"
         self.client = Client(host="http://localhost:11434")
 
-    def call_model(self):
+    def call_model(self, prompt):
         response = self.client.generate(
             model=self.model,  
-            prompt=self.prompt,
+            prompt=prompt,
             stream=False,
             options={
                 'temperature': 0.9,
@@ -26,12 +24,29 @@ class Agent:
         )
         return (response['response'])
     
+    def extract_topic(prompt:str) -> str: 
+        prompt = f''' 
+        Пользователь ввел следующий запрос: "{prompt}"
+        На основе этого запроса сформулируй тему, которую пользователь хочет изучить.
+        Если пользователь прямо не указал, что он конкретно хочет найти, или не может сформулировать тему, постарайся помочь пользователю сформулировать тему правильно.
+        Если пользователь конкретно указал, какую тему ищет, или ты смог сформулировать тему, то ответь только названием темы.
+        Если не удалось сформулировать тему, или нельзя уверенно сказать, что имел в виду пользователь, верни только 0.
+        Если пользователь задал тему и в ней есть орфографические ошибки или опечатки - исправь их.
+        При формировании темы соблюдай следующие правила:
+        - тема формируется только на английском языке
+        - страйся формулировать тему кратко, в двух-трех словах
+        - тема формируется для дальнейшего поиска статей
+        '''
+
+        response = self.call_model(prompt)
+        return (response['response'])
+    
     def strip_tags(self, text: str) -> str: # Текст, получаемый от Википедии содержал тэги разметки страницы, функция чистит текст от них
         return re.sub(r"<[^>]+>", "", text or "")
     
     def relevance_assessment(self, topic:str, content:list) -> str:
         content = ' '.join(content)
-        promt = f'''
+        prompt = f'''
         Пользователь ищет информацию по теме "{topic}". 
         Вот что удалось найти по теме: {content}. 
         Оцени, на сколько найденный материал совпадает с заданной темой. 
@@ -39,7 +54,7 @@ class Agent:
         Иначе можешь вернуть исходный текст.
         Если ты не уверен в том, что текст отвечает заданной тематике, верни только 0.
         ''' 
-        result = self.model_call(promt)
+        result = self.model_call(prompt)
         return result
     
     def wiki_search(self, query:str) -> str:
@@ -89,7 +104,7 @@ class Agent:
         return " ".join(token for _, token in words)
     
     def search_arxiv(query:str, per_page: int=5) -> str:
-        query = '+'.join(query.splt())
+        query = '%20'.join(query.split())
         url = f'http://export.arxiv.org/api/query?search_query=all:{query}&start=0&max_results={per_page}'
         response = requests.get(url, timeout=30).text
         root = ET.fromstring(response)
@@ -107,23 +122,3 @@ class Agent:
                 result.append(f"name: {elem.text}")  
         return ' '.join(result[2::])
     
-def search_arxiv(query:str, per_page: int=5) -> str:
-    query = '%20'.join(query.split())
-    url = f'http://export.arxiv.org/api/query?search_query=all:{query}&start=0&max_results={per_page}'
-    response = requests.get(url, timeout=30).text
-    root = ET.fromstring(response)
-    result = []
-    for elem in root.iter():
-        if elem.tag =="{http://www.w3.org/2005/Atom}id":
-            result.append(f"id: {elem.text}")
-        if elem.tag =="{http://www.w3.org/2005/Atom}title":
-             result.append(f"title: {elem.text}")       
-        if elem.tag =="{http://www.w3.org/2005/Atom}sumary":
-            result.append(f"sumary: {elem.text}")  
-        if elem.tag =="{http://www.w3.org/2005/Atom}published":
-            result.append(f"published: {elem.text}")  
-        if elem.tag =="{http://www.w3.org/2005/Atom}name":
-            result.append(f"name: {elem.text}")  
-    return ' '.join(result[2::])
-    
-print(search_arxiv('gradient boost'))
