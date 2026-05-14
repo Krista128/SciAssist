@@ -1,7 +1,22 @@
-SciAssist
+##SciAssist
 ==============================
 
-A short description of the project.
+###Project Overview
+
+Article Analysis & Research Assistant – A locally-hosted chatbot application powered by QWEN3 for intelligent article processing and analysis.
+Full Description
+
+This project is an in-development tool designed to help users work with and analyze articles efficiently. Built with the QWEN3 language model, it provides an interactive chat-based interface for document understanding, summarization, question-answering, and content analysis.
+==============================
+
+###Key Features:
+
+    Local-First Architecture – Runs entirely on your machine with no cloud dependencies
+    QWEN3 Intelligence – Utilizes the qcwind/qwen3-8b-instruct-Q4-K-M:latest model via Ollama for powerful language understanding
+    Chat Interface – User-friendly conversational UI for seamless interaction with articles
+    Custom Interface – Dedicated interface designed specifically for article analysis workflows
+    Lightweight & Fast – Quantized model (Q4-K-M) for efficient local execution
+
 
 Project Organization
 ------------
@@ -35,19 +50,13 @@ Project Organization
     ├── src                <- Source code for use in this project.
     │   ├── __init__.py    <- Makes src a Python module
     │   │
-    │   ├── data           <- Scripts to download or generate data
-    │   │   └── make_dataset.py
+    │   ├── Agent.py           <- Main logic of the agent
+    │   │  
+    │   ├── AgentState.py       <- Store agent's status
     │   │
-    │   ├── features       <- Scripts to turn raw data into features for modeling
-    │   │   └── build_features.py
-    │   │
-    │   ├── models         <- Scripts to train models and then use trained models to make
-    │   │   │                 predictions
-    │   │   ├── predict_model.py
-    │   │   └── train_model.py
-    │   │
-    │   └── visualization  <- Scripts to create exploratory and results oriented visualizations
-    │       └── visualize.py
+    │   ├── AgentTools.py         <- Tools for agent: search and agregation
+    │   │   
+    │   └── ui.py  <- User interface for working with the agent
     │
     └── tox.ini            <- tox file with settings for running tox; see tox.readthedocs.io
 
