@@ -7,15 +7,16 @@ Article Analysis & Research Assistant – A locally-hosted chatbot application p
 Full Description
 
 This project is an in-development tool designed to help users work with and analyze articles efficiently. Built with the QWEN3 language model, it provides an interactive chat-based interface for document understanding, summarization, question-answering, and content analysis.
+
 ==============================
 
 ### Key Features:
 
-    Local-First Architecture – Runs entirely on your machine with no cloud dependencies
-    QWEN3 Intelligence – Utilizes the qcwind/qwen3-8b-instruct-Q4-K-M:latest model via Ollama for powerful language understanding
-    Chat Interface – User-friendly conversational UI for seamless interaction with articles
-    Custom Interface – Dedicated interface designed specifically for article analysis workflows
-    Lightweight & Fast – Quantized model (Q4-K-M) for efficient local execution
+- Local-First Architecture – Runs entirely on your machine with no cloud dependencies
+- QWEN3 Intelligence – Utilizes the qcwind/qwen3-8b-instruct-Q4-K-M:latest model via Ollama for powerful language understanding
+- Chat Interface – User-friendly conversational UI for seamless interaction with articles
+- Custom Interface – Dedicated interface designed specifically for article analysis workflows
+- Lightweight & Fast – Quantized model (Q4-K-M) for efficient local execution
 
 
 Project Organization
