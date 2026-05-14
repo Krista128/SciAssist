@@ -8,6 +8,8 @@ Full Description
 
 This project is an in-development tool designed to help users work with and analyze articles efficiently. Built with the QWEN3 language model, it provides an interactive chat-based interface for document understanding, summarization, question-answering, and content analysis.
 
+This project is actively under development. The core functionality is working, but new features and improvements are being added regularly.
+
 ==============================
 
 ### Key Features:
