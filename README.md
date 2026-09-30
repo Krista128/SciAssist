@@ -1,7 +1,7 @@
 SciAssist
 ==============================
 
-A short description of the project.
+To get started, run the file app.py
 
 Project Organization
 ------------
